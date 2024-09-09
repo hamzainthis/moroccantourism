@@ -2,3 +2,8 @@ fastapi
 uvicorn
 transformers
 torch
+fastapi
+uvicorn
+transformers
+torch
+accelerate
