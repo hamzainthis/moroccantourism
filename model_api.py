@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
@@ -16,6 +17,7 @@ model = AutoModelForCausalLM.from_pretrained(
     return_dict=True,
     torch_dtype=torch.float32,  # Using float32 for CPU
     device_map="cpu",           # Force the model to load on CPU
+    low_cpu_mem_usage=True
 )
 
 # Set the model to evaluation mode
@@ -47,3 +49,9 @@ async def generate_text(request: TextGenerationRequest):
     
     # Return the generated text
     return {"response": outputs[0]["generated_text"]}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Bind to the Render-assigned port
+    uvicorn.run(app, host="0.0.0.0", port=port)
